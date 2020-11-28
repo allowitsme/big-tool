@@ -37,7 +37,7 @@ add b0 0x1
 
 **Flash pointers**: `flash<number_of_the_flash_ptr>` (or `f<number_of_the_flash_ptr>`). Stores some linear address of the flash.
 ```
-set f0 0xA0000000
+set f0 0xA00000
 sub f0 0x10
 ```
 **Registers**: `r<number_of_the_register>` - a little storage of the temporal data.
