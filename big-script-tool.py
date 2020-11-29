@@ -15,31 +15,33 @@ OP3_NUM = 2
 # @TODO: take it out of here (json probably)
 #
 opcodes = {
-    0x01: { 'name': 'start',
+    0x00: { 'name': 'nop',
             'operands': ['unused', 'unused', 'unused'] },
-    0x10: { 'name': 'store',
+    0x01: { 'name': 'begin',
+            'operands': ['unused', 'unused', 'unused'] },
+    0x10: { 'name': 'write',
             'operands': ['flash', 'buff', 'reg'] },
-    0x11: { 'name': 'store',
+    0x11: { 'name': 'write',
             'operands': ['flash', 'buff', 'imm'] },
-    0x12: { 'name': 'load',
+    0x12: { 'name': 'read',
             'operands': ['buff', 'flash', 'reg'] },
-    0x13: { 'name': 'load',
+    0x13: { 'name': 'read',
             'operands': ['buff', 'flash', 'imm'] },
     0x14: { 'name': 'eraseblk',
             'operands': ['flash', 'unused', 'unused'] },
-    0x15: { 'name': 'eraseblk64kb',
+    0x15: { 'name': 'erase64kblk',
             'operands': ['flash', 'unused', 'unused'] },
-    0x20: { 'name': 'eccmd1',
+    0x20: { 'name': 'eccmdwr',
             'operands': ['reg', 'unused', 'unused'] },
-    0x21: { 'name': 'eccmd2',
+    0x21: { 'name': 'eccmdwr',
             'operands': ['unused', 'unused', 'imm'] },
-    0x22: { 'name': 'eccmd3',
+    0x22: { 'name': 'ecstsrd',
             'operands': ['reg', 'unused', 'unused'] },
-    0x23: { 'name': 'eccmd4',
+    0x23: { 'name': 'ecdatawr',
             'operands': ['reg', 'unused', 'unused'] },
-    0x24: { 'name': 'eccmd5',
+    0x24: { 'name': 'ecdatawr',
             'operands': ['unused', 'unused', 'imm'] },
-    0x25: { 'name': 'eccmd6',
+    0x25: { 'name': 'ecdatard',
             'operands': ['reg', 'unused', 'unused'] },
     0x30: { 'name': 'add',
             'operands': ['reg', 'reg', 'unused'] },
@@ -73,13 +75,13 @@ opcodes = {
             'operands': ['reg', 'reg', 'unused'] },
     0x43: { 'name': 'or',
             'operands': ['reg', 'unused', 'imm'] },
-    0x44: { 'name': 'shr',
+    0x44: { 'name': 'shiftr',
             'operands': ['reg', 'unused', 'imm'] },
-    0x45: { 'name': 'shl',
+    0x45: { 'name': 'shiftl',
             'operands': ['reg', 'unused', 'imm'] },
-    0x46: { 'name': 'ror',
+    0x46: { 'name': 'rotater',
             'operands': ['reg', 'unused', 'imm'] },
-    0x47: { 'name': 'rol',
+    0x47: { 'name': 'rotatel',
             'operands': ['reg', 'unused', 'imm'] },
     0x50: { 'name': 'set',
             'operands': ['reg', 'reg', 'unused'] },
@@ -105,21 +107,21 @@ opcodes = {
             'operands': ['buff', 'reg', 'unused'] },
     0x65: { 'name': 'storedword',
             'operands': ['buff', 'reg', 'unused'] },
-    0x70: { 'name': 'cmp',
+    0x70: { 'name': 'compare',
             'operands': ['reg', 'reg', 'unused'] },
-    0x71: { 'name': 'cmp',
+    0x71: { 'name': 'compare',
             'operands': ['reg', 'unused', 'imm'] },
-    0x72: { 'name': 'cmp',
+    0x72: { 'name': 'compare',
             'operands': ['buff', 'reg', 'unused'] },
-    0x73: { 'name': 'cmp',
+    0x73: { 'name': 'compare',
             'operands': ['buff', 'unused', 'imm'] },
-    0x74: { 'name': 'cmp',
+    0x74: { 'name': 'compare',
             'operands': ['flash', 'reg', 'unused'] },
-    0x75: { 'name': 'cmp',
+    0x75: { 'name': 'compare',
             'operands': ['flash', 'unused', 'imm'] },
-    0x76: { 'name': 'cmp',
+    0x76: { 'name': 'compare',
             'operands': ['buff', 'buff', 'reg'] },
-    0x77: { 'name': 'cmp',
+    0x77: { 'name': 'compare',
             'operands': ['buff', 'buff', 'imm'] },
     0x80: { 'name': 'copy',
             'operands': ['buff', 'buff', 'reg'] },
@@ -147,17 +149,17 @@ opcodes = {
             'operands': ['imm', 'unused', 'imm'] },
     0xb0: { 'name': 'rdsts',
             'operands': ['reg', 'unused', 'unused'] },
-    0xb1: { 'name': 'unk',
+    0xb1: { 'name': 'rdkeyslot',
             'operands': ['reg', 'unused', 'unused'] },
-    0xb2: { 'name': 'rand',
+    0xb2: { 'name': 'rdrand',
             'operands': ['reg', 'unused', 'unused'] },
-    0xc0: { 'name': 'sleep',
+    0xc0: { 'name': 'stall',
             'operands': ['unused', 'unused', 'imm'] },
-    0xc1: { 'name': 'unk1',
+    0xc1: { 'name': 'rdts',
             'operands': ['reg', 'unused', 'unused'] },
-    0xc2: { 'name': 'unk2',
+    0xc2: { 'name': 'setts',
             'operands': ['unused', 'unused', 'unused'] },
-    0xc3: { 'name': 'unk3',
+    0xc3: { 'name': 'clearts',
             'operands': ['unused', 'unused', 'unused'] },
     0xff: { 'name': 'end',
             'operands': ['unused', 'unused', 'unused'] }
@@ -200,7 +202,7 @@ class BigScript:
         self.instructions = [Instruction(self.op_dict, i*INSTR_LEN, instr_string=code_lines[i]) for i in range(0, code_lines_count)]
 
         if not self.instructions[0].is_start():
-            print('WARNING: the input script doesn\'t start with `start` opcode. ACM will reject this script.')
+            print('WARNING: the input script doesn\'t start with `begin` opcode. ACM will reject this script.')
         if not self.instructions[-1].is_end():
             print('WARNING: the input script doesn\'t end with `end` opcode. ACM will reject this script.')
 
@@ -218,7 +220,7 @@ class BigScript:
         self.instructions = [Instruction(self.op_dict, i*INSTR_LEN, instr_bytes=code_lines[i]) for i in range(0, code_lines_count)]
 
         if not self.instructions[0].is_start():
-            print('WARNING: the input script doesn\'t start with `start` opcode. It may be corrupted.')
+            print('WARNING: the input script doesn\'t start with `begin` opcode. It may be corrupted.')
         if not self.instructions[-1].is_end():
             print('WARNING: the input script doesn\'t end with `end` opcode. It may be corrupted.')
 
@@ -238,7 +240,7 @@ class BigScript:
         labels.sort()
         offset = 0
         for label in labels:
-            code_str_lines.insert(label+offset, '_lb'+str(label))
+            code_str_lines.insert(label+offset, '_lb'+str(label)+':')
             offset+=1
 
         self.code_str = '\n'.join(code_str_lines)
@@ -287,7 +289,7 @@ class Instruction:
                     self.opcode_num = current_op_num
 
         if self.opcode_num is None:
-            raise Exception('ERROR: unknown opcode ' + self.opcode_name + ' with operands ' + str(used_operands_mask) + ' at ' + hex(self.addr) + '')
+            raise Exception('ERROR: unknown opcode ' + self.opcode_name + ' with operands ' + str(used_operands_mask) + ' at ' + '0x%X' % self.addr + '')
 
         # fix operands numbers
         for i in range(0, operands_count):
@@ -315,7 +317,7 @@ class Instruction:
         self.opcode_num, op1, op2, op3 = struct.unpack('HBBI', instr_bytes)
 
         if not self.opcode_num in self.op_dict:
-            raise Exception('ERROR: unknown opcode ' + hex(self.opcode_num) + ' at ' + hex(self.addr) + '')
+            raise Exception('ERROR: unknown opcode ' + '0x%X' % self.opcode_num + ' at ' + '0x%X' % self.addr + '')
 
         instr_dict = self.op_dict[self.opcode_num]
         self.operands[OP1_NUM] = Operand(self.addr, op_value=op1, op_num=OP1_NUM, root_instr_dict=instr_dict)
@@ -384,7 +386,7 @@ class Operand:
         elif first_chr.isdigit():
             self.op_type = 'imm'
         else:
-            raise Exception('ERROR: unknown type of operand ' + op_string + ' at addr ' + hex(self.instr_addr))
+            raise Exception('ERROR: unknown type of operand ' + op_string + ' at addr ' + '0x%X' % self.instr_addr)
 
         self.op_value = 0
         possible_values = re.findall('0[xX][0-9a-fA-F]+|\\d+', op_string)
@@ -397,20 +399,20 @@ class Operand:
 
     def disassemble(self, op_value):
         if self.instr_dict is None:
-            raise Exception('ERROR: instruction dict need to be passed for operands dissasembly (addr ' + hex(self.instr_addr) + ')')
+            raise Exception('ERROR: instruction dict need to be passed for operands dissasembly (addr ' + '0x%X' % self.instr_addr + ')')
         if self.op_value is None:
-            raise Exception('ERROR: operand value need to be passed for operands dissasembly (addr ' + hex(self.instr_addr) + ')')
+            raise Exception('ERROR: operand value need to be passed for operands dissasembly (addr ' + '0x%X' % self.instr_addr + ')')
 
         operands_mask = self.instr_dict['operands']
         self.op_type = operands_mask[self.op_num]
         if self.op_type == 'flash':
-            self.op_str = 'flash' + str(self.op_value)
+            self.op_str = 'F%X' % self.op_value
         elif self.op_type == 'buff':
-            self.op_str = 'buffer' + str(self.op_value)
+            self.op_str = 'B' + str(self.op_value)
         elif self.op_type == 'reg':
-            self.op_str = 'r' + str(self.op_value)
+            self.op_str = 'I%X' % self.op_value
         elif self.op_type == 'imm':
-            self.op_str = hex(self.op_value)
+            self.op_str = '0x%X' % self.op_value
 
     def get_type(self):
         return self.op_type
